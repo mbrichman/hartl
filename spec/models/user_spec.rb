@@ -65,8 +65,8 @@ describe User do
 
   describe "when there are duplicate email addresses" do
     before do
-      user_with_same_email = user_account
-      user_with_same_email.email = user_account.email.upcase
+      user_with_same_email = @user.dup
+      user_with_same_email.email = @user.email.upcase
       user_with_same_email.save
     end
     it { should_not be_valid }
@@ -83,7 +83,7 @@ describe User do
   end
 
   describe "when password confirmation is nil" do
-    before { @user.password_confirmation = nil }
+    before { @user.password_confirmation = '' }
     it { should_not be_valid }
   end
 
@@ -108,4 +108,32 @@ describe User do
       it { should be_invalid }
     end
   end
+
+  describe "email address with mixed" do
+    let(:mixed_case_email) { "Foo@ExAmPle.CoM" }
+
+    it "should be saved as lower case" do
+      @user.email = mixed_case_email
+      @user.save
+      @user.reload.email.should == mixed_case_email.downcase
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 end
